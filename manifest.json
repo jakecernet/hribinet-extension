@@ -1,0 +1,14 @@
+{
+    "manifest_version": 3,
+    "name": "Hribi.net modern",
+    "version": "1.0",
+    "description": "idk neko random sranje",
+
+    "content_scripts": [
+        {
+            "matches": ["*://*.hribi.net/*", "*://*.hike.uno/*"],
+            "js": ["content.js"],
+            "run_at": "document_end"
+        }
+    ]
+}
