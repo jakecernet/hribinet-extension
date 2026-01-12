@@ -101,10 +101,11 @@ body {
 }
 
 .menizgorajA {
-    width: calc(100vw - 200px) !important;
-    margin-left: 200px !important;
+    width: calc(100vw - 217px) !important;
     height: 50px !important;
-    background: rgba(255, 255, 255, 0.5) !important;
+    background: #ccddf762 !important;
+    position: absolute !important;
+    right: 0 !important;
 
     .menizgoraj {
         display: flex !important;
@@ -112,6 +113,19 @@ body {
         justify-content: space-between !important;
         height: 100% !important;
         padding: 0 20px !important;
+        background: #0f2027 !important;
+        background: -webkit-linear-gradient(
+            to right,
+            #0f2027,
+            #203a43,
+            #2c5364
+        ) !important;
+        background: linear-gradient(
+            to right,
+            #0f2027,
+            #203a43,
+            #2c5364
+        ) !important;
 
         #MeniZgorajLevo {
             display: flex !important;
@@ -213,7 +227,6 @@ A.meni:hover {
     align-items: stretch !important;
     gap: 0px !important;
     width: 200px !important;
-    margin-top: -50px !important;
     box-shadow: inset -2px 0 8px rgba(0, 0, 0, 0.3) !important;
     border-right: 1px solid rgba(255, 255, 255, 0.08) !important;
 
@@ -280,5 +293,34 @@ A.meni:hover {
         ) !important;
         border: none !important;
         margin: 4px 16px !important;
+    }
+}
+
+#okvir {
+    max-width: 100% !important;
+
+    .main {
+        background: #0f2027 !important;
+        background: -webkit-linear-gradient(
+            to right,
+            #0f2027,
+            #203a43,
+            #2c5364
+        ) !important;
+        background: linear-gradient(
+            to right,
+            #0f2027,
+            #203a43,
+            #2c5364
+        ) !important;
+        width: calc(100vw - 220px) !important;
+        margin-top: 50px !important;
+
+        #drobtinice {
+            background: transparent !important;
+            color: #eee !important;
+            font-size: 14px !important;
+            padding: 10px 20px !important;
+        }
     }
 }
