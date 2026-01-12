@@ -1,0 +1,2828 @@
+<!DOCTYPE html>
+<form method="post" action="./" id="form1">
+    <script>
+        function tooltip(tekst) {
+            var tempDiv = document.createElement("div");
+            document.body.appendChild(tempDiv);
+            tempDiv.innerHTML = tekst;
+            tempDiv.className = "tooltiptext";
+            setTimeout(function () {
+                document.body.removeChild(tempDiv);
+            }, 2000);
+        }
+    </script>
+
+    <script>
+        function prijava() {
+            if (
+                document.getElementById("DivPrijava").style.display == "block"
+            ) {
+                document.getElementById("DivPrijava").style.display = "none";
+            } else {
+                document.getElementById("DivPrijava").style.display = "block";
+                document.getElementById("prijava1").focus();
+            }
+        }
+
+        function prijava1(u, g, a, v) {
+            var xmlHttp;
+            try {
+                xmlHttp = new XMLHttpRequest();
+            } catch (e) {
+                try {
+                    xmlHttp = new ActiveXObject("Msxml2.XMLHTTP");
+                } catch (e) {
+                    try {
+                        xmlHttp = new ActiveXObject("Microsoft.XMLHTTP");
+                    } catch (e) {
+                        return false;
+                    }
+                }
+            }
+            xmlHttp.onreadystatechange = function () {
+                if (xmlHttp.readyState == 4) {
+                    if (xmlHttp.responseText.length < 10) {
+                        document.getElementById("DivPrijava").style.display =
+                            "none";
+                        //window.location.reload();
+
+                        setTimeout(function () {
+                            window.location.reload();
+                        });
+
+                        for (i = 0; i < document.forms.length; i++) {
+                            document.forms[i].reset();
+                        }
+                    } else {
+                        tooltip(xmlHttp.responseText);
+                    }
+                }
+            };
+
+            if (u.length > 0 && g.length > 0) {
+                xmlHttp.open("POST", "/ajaxprijava.aspx", false);
+                xmlHttp.setRequestHeader(
+                    "Content-type",
+                    "application/x-www-form-urlencoded"
+                );
+                xmlHttp.setRequestHeader("Cache-Control", "no-cache");
+                xmlHttp.setRequestHeader("Pragma", "no-cache");
+                xmlHttp.setRequestHeader(
+                    "If-Modified-Since",
+                    "Sat, 1 Jan 2000 00:00:00 GMT"
+                );
+                xmlHttp.send(
+                    "u=" +
+                        encodeURIComponent(u) +
+                        "&g=" +
+                        encodeURIComponent(g) +
+                        "&a=" +
+                        encodeURIComponent(a)
+                );
+            } else {
+                tooltip("Vpišite uporabniško ime in geslo!");
+            }
+        }
+
+        function prijavaE(evt) {
+            if (evt.keyCode === 13) {
+                evt.preventDefault();
+                prijava1(
+                    document.getElementById("prijava1").value,
+                    document.getElementById("prijava2").value,
+                    document.getElementById("avtoprijava").checked,
+                    1
+                );
+            }
+
+            var ASCIICode = evt.which ? evt.which : evt.keyCode;
+            if (ASCIICode > 31 && (ASCIICode < 48 || ASCIICode > 57))
+                return false;
+            return true;
+        }
+    </script>
+    <script>
+        function prijavaG() {
+            prijava1(
+                document.getElementById("prijava1").value,
+                document.getElementById("prijava2").value,
+                document.getElementById("avtoprijava").checked,
+                1
+            );
+        }
+    </script>
+
+    <script>
+        var menuU1 = 0;
+        var menuUS = 0;
+        var vednoOdprt = 0;
+
+        function menuUser(tt) {
+            if (tt == 1) {
+                if (menuU1 == 1) {
+                    if (
+                        window.innerWidth + 30 < menuUS ||
+                        window.innerWidth - 30 > menuUS
+                    ) {
+                        if (vednoOdprt == 1) {
+                            if (window.innerWidth > 800) {
+                                document.getElementById(
+                                    "MeniZgorajZgorajM"
+                                ).style.display = "none";
+                                menuU1 = 0;
+                            }
+                        } else {
+                            document.getElementById(
+                                "MeniZgorajZgorajM"
+                            ).style.display = "none";
+                            menuU1 = 0;
+                        }
+                    }
+                }
+            } else if (tt == 2) {
+                if (vednoOdprt == 1) {
+                    if (window.innerWidth <= 800) {
+                        document.getElementById("MeniZgorajZgorajM").innerHTML =
+                            "<div class='menizgorajM2'>" +
+                            document.getElementById("MeniZgorajZgoraj")
+                                .innerHTML +
+                            "</div>";
+                        document.getElementById(
+                            "MeniZgorajZgorajM"
+                        ).style.display = "block";
+                        menuU1 = 1;
+                        menuUS = window.innerWidth;
+                    }
+                }
+            } else {
+                if (menuU1 == 1) {
+                    if (vednoOdprt == 1) {
+                        if (window.innerWidth > 800) {
+                            document.getElementById(
+                                "MeniZgorajZgorajM"
+                            ).style.display = "none";
+                            menuU1 = 0;
+                        }
+                    } else {
+                        document.getElementById(
+                            "MeniZgorajZgorajM"
+                        ).style.display = "none";
+                        menuU1 = 0;
+                    }
+                } else {
+                    document.getElementById("MeniZgorajZgorajM").innerHTML =
+                        "<div class='menizgorajM2'>" +
+                        document.getElementById("MeniZgorajZgoraj").innerHTML +
+                        "</div>";
+                    document.getElementById("MeniZgorajZgorajM").style.display =
+                        "block";
+                    menuU1 = 1;
+                    menuUS = window.innerWidth;
+                }
+            }
+        }
+
+        function menuZ() {
+            if (window.innerWidth <= 800) {
+                document.getElementById("menizgorajM").innerHTML =
+                    "<div class='menizgorajM2'>" +
+                    document.getElementById("MeniZgorajSredina").innerHTML +
+                    "</div>";
+            }
+        }
+
+        var menu1 = 0;
+        var menuS = 0;
+        function menu(tt) {
+            if (tt == 1) {
+                if (menu1 == 1) {
+                    if (
+                        window.innerWidth + 30 < menuS ||
+                        window.innerWidth - 30 > menuS
+                    ) {
+                        document.getElementById("meniOzadje").style.display =
+                            "none";
+                        document.getElementById("leftM").style.display = "none";
+                        //document.getElementsByTagName("BODY")[0].classList.remove("fixedPosition");
+                        //document.getElementById("MeniZgorajLevo").style.display = "none";
+                        menu1 = 0;
+                    }
+                }
+            } else {
+                if (menu1 == 1) {
+                    document.getElementById("meniOzadje").style.display =
+                        "none";
+                    document.getElementById("leftM").style.display = "none";
+                    //document.getElementsByTagName("BODY")[0].classList.remove("fixedPosition");
+
+                    menu1 = 0;
+                } else {
+                    document.getElementById("leftM").innerHTML =
+                        "<div class='MeniZgorajLevo2'>" +
+                        document.getElementById("MeniZgorajLevo").innerHTML +
+                        "</div><div>" +
+                        document.getElementById("left").innerHTML +
+                        "</div>";
+                    document.getElementById("meniOzadje").style.display =
+                        "block";
+                    document.getElementById("leftM").style.display = "block";
+                    //document.getElementsByTagName("BODY")[0].classList.add("fixedPosition");
+
+                    menu1 = 1;
+                    menuS = window.innerWidth;
+                }
+            }
+        }
+
+        var isk22 = true;
+        function iskanje22() {
+            if (isk22) {
+                document.getElementById("iskalnik3").style.display = "block";
+                isk22 = false;
+                document.getElementById("iskalnikX").focus();
+            } else {
+                document.getElementById("iskalnik3").style.display = "none";
+                isk22 = true;
+            }
+        }
+
+        function iskanje11() {
+            if (document.getElementById("iskalnikX").value != "") {
+                window.location.replace(
+                    "/iskalnik.asp?q=" +
+                        encodeURIComponent(
+                            document.getElementById("iskalnikX").value
+                        )
+                );
+            } else {
+                tooltip("Vpišite iskan niz besed!");
+            }
+        }
+
+        function iskanje111(eventx) {
+            if (eventx.keyCode === 13) {
+                eventx.preventDefault();
+                if (document.getElementById("iskalnikX").value != "") {
+                    window.location.replace(
+                        "/iskalnik.asp?q=" +
+                            encodeURIComponent(
+                                document.getElementById("iskalnikX").value
+                            )
+                    );
+                } else {
+                    tooltip("Vpišite iskan niz besed!");
+                }
+            }
+        }
+    </script>
+
+    <script type="text/javascript">
+        function ajaxc() {
+            var xmlHttpcl;
+            try {
+                xmlHttpcl = new XMLHttpRequest();
+            } catch (e) {
+                try {
+                    xmlHttpcl = new ActiveXObject("Msxml2.XMLHTTP");
+                } catch (e) {
+                    try {
+                        xmlHttpcl = new ActiveXObject("Microsoft.XMLHTTP");
+                    } catch (e) {
+                        return false;
+                    }
+                }
+            }
+            xmlHttpcl.onreadystatechange = function () {};
+            xmlHttpcl.open("GET", "/ajaxc.asp", false);
+            xmlHttpcl.setRequestHeader("Cache-Control", "no-cache");
+            xmlHttpcl.setRequestHeader("Pragma", "no-cache");
+            xmlHttpcl.setRequestHeader(
+                "If-Modified-Since",
+                "Sat, 1 Jan 2000 00:00:00 GMT"
+            );
+            xmlHttpcl.send(null);
+        }
+        ajaxc();
+    </script>
+
+    <script type="text/javascript">
+        function locljivost(l) {
+            var xmlHttploc;
+            try {
+                xmlHttploc = new XMLHttpRequest();
+            } catch (e) {
+                try {
+                    xmlHttploc = new ActiveXObject("Msxml2.XMLHTTP");
+                } catch (e) {
+                    try {
+                        xmlHttploc = new ActiveXObject("Microsoft.XMLHTTP");
+                    } catch (e) {
+                        return false;
+                    }
+                }
+            }
+            xmlHttploc.onreadystatechange = function () {};
+            xmlHttploc.open("GET", "/ajaxlocljivost.asp?l=" + l, false);
+            xmlHttploc.setRequestHeader("Cache-Control", "no-cache");
+            xmlHttploc.setRequestHeader("Pragma", "no-cache");
+            xmlHttploc.setRequestHeader(
+                "If-Modified-Since",
+                "Sat, 1 Jan 2000 00:00:00 GMT"
+            );
+            xmlHttploc.send(null);
+        }
+
+        locljivost(window.innerWidth);
+    </script>
+    <div id="glava">
+        <div id="glava1_desktop">
+            <a href="/" title="hribi"
+                ><span><img src="/slike/logo.png" alt="Hribi.net" /></span
+            ></a>
+        </div>
+        <div id="glava1_mobile">
+            <a href="/" title="hribi"
+                ><img src="/slike/logo_mobile.png" alt="Hribi.net"
+            /></a>
+        </div>
+
+        <div id="iskalnik3">
+            <table>
+                <tbody>
+                    <tr>
+                        <td class="td1">
+                            <input
+                                onkeypress="iskanje111(event);"
+                                class="iskalnik1"
+                                type="text"
+                                id="iskalnikX"
+                            />
+                        </td>
+                        <td class="td1">
+                            <div
+                                onclick="iskanje11();"
+                                class="gumbiskanje"
+                            ></div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div id="glava5">
+            <div title="Menu" onclick="menu();" id="gM"></div>
+        </div>
+        <div id="glava3">
+            <div title="Prijava" onclick="prijava();" id="gA">
+                <span class="h800">Prijava</span>
+            </div>
+        </div>
+
+        <div id="glava2"></div>
+
+        <div id="glava22">
+            <div title="Iskanje" onclick="iskanje22();" id="gMi"></div>
+        </div>
+
+        <div id="glava4">
+            <div id="MeniZgorajZgoraj"></div>
+        </div>
+    </div>
+    <div id="MeniZgorajZgorajM"></div>
+
+    <div id="DivPrijava">
+        <div id="DivPrijava2">
+            <div><b>Prijava</b></div>
+            <div class="rdec" id="prijavaNapaka"></div>
+            <div style="margin-top: 5px">Uporabniško ime:</div>
+            <div>
+                <input
+                    onkeypress="prijavaE(event);"
+                    class="tbox1"
+                    type="text"
+                    id="prijava1"
+                />
+            </div>
+            <div style="margin-top: 5px">Geslo:</div>
+            <div>
+                <input
+                    onkeypress="prijavaE(event);"
+                    class="tbox1"
+                    type="password"
+                    id="prijava2"
+                />
+            </div>
+            <div style="margin-top: 5px">
+                <label for="avtoprijava">Zapomni si me:</label>
+                <input type="checkbox" id="avtoprijava" />
+            </div>
+            <div style="margin-top: 5px">
+                <div class="gumb1" onclick="prijavaG();">Prijava</div>
+            </div>
+            <div style="padding-top: 15px; clear: both">
+                Še niste registrirani?
+                <a href="/registracija.asp">Registracija</a>.
+            </div>
+            <div style="margin-top: 15px">
+                <a href="/geslo.asp">Ste pozabili geslo?</a>
+            </div>
+        </div>
+    </div>
+
+    <div id="meniOzadje" onclick="menu();"></div>
+
+    <div id="menizgorajM"></div>
+    <div class="menizgorajA">
+        <div class="menizgoraj">
+            <div id="MeniZgorajLevo">
+                <a href="https://www.hike.uno"><img src="/slike/eng.gif" /></a
+                >&nbsp;&nbsp;<a href="http://hr.hribi.net"
+                    ><img src="/slike/hrv.gif"
+                /></a>
+            </div>
+            <div id="MeniZgorajSredina">
+                <div class="zavihek1"><a class="pov2" href="/">Novice</a></div>
+                <div class="zavihek0">
+                    <a class="pov2" href="/arhiv_novic">Arhiv novic</a>
+                </div>
+                <div class="zavihek0">
+                    <a class="pov2" href="/objavi_novico"
+                        >Objavi članek/novico</a
+                    >
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="okvir">
+        <div class="left" id="left">
+            <div class="hr"></div>
+            <div class="meni1">
+                <a class="meni" href="/"><h2>Novice</h2></a>
+            </div>
+            <div class="hr"></div>
+            <div class="meni1">
+                <a class="meni" href="/trenutnerazmere.asp?slo=1"
+                    ><h2>Trenutne razmere</h2></a
+                >
+            </div>
+            <div class="hr"></div>
+            <div class="meni1">
+                <a class="meni" href="/gorovja"><h2>Seznam gora</h2></a>
+            </div>
+            <div class="hr"></div>
+            <div class="meni1">
+                <a class="meni" href="/iskalnik_izletov"
+                    ><h2>Iskanje izletov</h2></a
+                >
+            </div>
+            <div class="hr"></div>
+            <div class="meni1">
+                <a class="meni" href="/gorske_panorame"><h2>Panorama</h2></a>
+            </div>
+            <div class="hr"></div>
+            <div class="meni1">
+                <a class="meni" href="/video/"><h2>Video</h2></a>
+            </div>
+            <div class="hr"></div>
+            <div class="meni1">
+                <a class="meni" href="/mali_oglasi"><h2>Mali oglasi</h2></a>
+            </div>
+            <div class="hr"></div>
+            <div class="meni1">
+                <a class="meni" href="/vpisna_knjiga_vrhov"
+                    ><h2>Vpisna knjiga</h2></a
+                >
+            </div>
+            <div class="hr"></div>
+            <div class="meni1">
+                <a class="meni" href="/prireditve.asp"><h2>Prireditve</h2></a>
+            </div>
+            <div class="hr"></div>
+            <div class="meni1">
+                <a class="meni" href="/alpske_zivali"><h2>Živali</h2></a>
+            </div>
+            <div class="hr"></div>
+            <div class="meni1">
+                <a class="meni" href="/rastline"><h2>Cvetje</h2></a>
+            </div>
+            <div class="hr"></div>
+            <div class="meni1">
+                <a class="meni" href="/kviz.asp"><h2>Kviz</h2></a>
+            </div>
+            <div class="hr"></div>
+            <div class="meni1">
+                <a class="meni" href="/zemljevid.asp"><h2>Zemljevid</h2></a>
+            </div>
+            <div class="hr"></div>
+            <div class="meni1">
+                <a class="meni" href="/vreme.asp"><h2>Vreme</h2></a>
+            </div>
+            <div class="hr"></div>
+            <div class="meni1">
+                <a class="meni" href="/gps.asp"><h2>GPS sledi</h2></a>
+            </div>
+            <div class="hr"></div>
+            <div class="meni1">
+                <a class="meni" href="/spletne_kamere_v_gorah"
+                    ><h2>Spletne kamere</h2></a
+                >
+            </div>
+            <div class="hr"></div>
+            <div class="meni1">
+                <a class="meni" href="/najslike.asp"><h2>Slike</h2></a>
+            </div>
+            <div class="hr"></div>
+            <div class="meni1">
+                <a class="meni" href="/donacije.aspx"><h2>Doniraj</h2></a>
+            </div>
+            <div class="hr"></div>
+
+            <div style="margin: 5px -2px 0px -3px">
+                <table style="width: 100%">
+                    <tbody>
+                        <tr style="background-color: #4ec29e">
+                            <td colspan="3">
+                                <div class="anketanaslov">Anketa</div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td colspan="3">
+                                <div class="anketabesedilo2">
+                                    Ali ste že bili na Mirni gori (1047 m)?
+                                </div>
+                            </td>
+                        </tr>
+
+                        <script type="text/javascript">
+                            function anketaGlasuj() {
+                                var av = 0;
+                                var stOdg = 3;
+                                for (i = 1; i <= stOdg; i++) {
+                                    if (
+                                        document.getElementById("anketa" + i)
+                                            .checked
+                                    ) {
+                                        av = i;
+                                    }
+                                }
+
+                                var xmlHttpAnketa;
+                                try {
+                                    xmlHttpAnketa = new XMLHttpRequest();
+                                } catch (e) {
+                                    try {
+                                        xmlHttpAnketa = new ActiveXObject(
+                                            "Msxml2.XMLHTTP"
+                                        );
+                                    } catch (e) {
+                                        try {
+                                            xmlHttpAnketa = new ActiveXObject(
+                                                "Microsoft.XMLHTTP"
+                                            );
+                                        } catch (e) {
+                                            return false;
+                                        }
+                                    }
+                                }
+                                xmlHttpAnketa.onreadystatechange = function () {
+                                    if (xmlHttpAnketa.readyState == 4) {
+                                        location.reload();
+                                        //document.getElementById("cookie_1").innerHTML=xmlHttpAnketa.responseText;
+                                    }
+                                };
+                                xmlHttpAnketa.open(
+                                    "GET",
+                                    "/anketa.asp?id=1026&av=" + av,
+                                    false
+                                );
+                                xmlHttpAnketa.setRequestHeader(
+                                    "Cache-Control",
+                                    "no-cache"
+                                );
+                                xmlHttpAnketa.setRequestHeader(
+                                    "Pragma",
+                                    "no-cache"
+                                );
+                                xmlHttpAnketa.setRequestHeader(
+                                    "If-Modified-Since",
+                                    "Sat, 1 Jan 2000 00:00:00 GMT"
+                                );
+                                xmlHttpAnketa.send(null);
+                            }
+                        </script>
+
+                        <tr>
+                            <td>
+                                <input
+                                    value="odgovor1"
+                                    type="radio"
+                                    style="
+                                        height: 15px;
+                                        margin: 0px 0px 0px 2px;
+                                        padding: 0px;
+                                    "
+                                    id="anketa1"
+                                    name="anketa"
+                                />
+                            </td>
+                            <td
+                                style="
+                                    width: 100%;
+                                    font-size: 10px;
+                                    color: #f5f5f5;
+                                "
+                            >
+                                <label for="anketa1">Da</label>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <input
+                                    value="odgovor2"
+                                    type="radio"
+                                    style="
+                                        height: 15px;
+                                        margin: 0px 0px 0px 2px;
+                                        padding: 0px;
+                                    "
+                                    id="anketa2"
+                                    name="anketa"
+                                />
+                            </td>
+                            <td
+                                style="
+                                    width: 100%;
+                                    font-size: 10px;
+                                    color: #f5f5f5;
+                                "
+                            >
+                                <label for="anketa2">Ne</label>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <input
+                                    value="odgovor3"
+                                    type="radio"
+                                    style="
+                                        height: 15px;
+                                        margin: 0px 0px 0px 2px;
+                                        padding: 0px;
+                                    "
+                                    id="anketa3"
+                                    name="anketa"
+                                />
+                            </td>
+                            <td
+                                style="
+                                    width: 100%;
+                                    font-size: 10px;
+                                    color: #f5f5f5;
+                                "
+                            >
+                                <label for="anketa3">Ne vem</label>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td colspan="2">
+                                <div class="gumb3" onclick="anketaGlasuj();">
+                                    Glasuj
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="leftM" id="leftM"></div>
+
+        <script>
+            window.addEventListener("scroll", function (event) {
+                if (document.documentElement.scrollTop >= 110) {
+                    document.getElementById("oglasD").style.position = "fixed";
+                    document.getElementById("oglasD").style.top = "0px";
+                } else {
+                    document.getElementById("oglasD").style.position = "static";
+                    document.getElementById("oglasD").style.top = "";
+                }
+            });
+        </script>
+
+        <div class="main">
+            <div id="drobtinice">Novice</div>
+
+            <div
+                style="
+                    padding: 10px;
+                    margin-top: 10px;
+                    color: #777777;
+                    background: #eeeeee;
+                    border: solid 1px #dddddd;
+                    display: none;
+                "
+                id="doniraj"
+            >
+                <span
+                    title="Doniraj"
+                    style="cursor: pointer"
+                    onclick="javascript:location.href='/donacije.aspx'"
+                    ><a href="/donacije.aspx"
+                        >Podprite Hribi.net z donacijo. Hvala.</a
+                    ></span
+                ><span
+                    title="zapri in ne prikazuj več"
+                    style="float: right; cursor: pointer"
+                    onclick="ad(2);"
+                    ><u>zapri</u></span
+                >
+            </div>
+
+            <div id="oglas1">
+                <div id="oglas1a">
+                    <style type="text/css">
+                        .adslot_2 {
+                            display: inline-block;
+                            width: 320px;
+                            height: 100px;
+                        }
+                        @media (max-width: 467px) {
+                            .adslot_2 {
+                                width: 320px;
+                                height: 100px;
+                            }
+                        }
+                        @media (min-width: 468px) {
+                            .adslot_2 {
+                                width: 468px;
+                                height: 60px;
+                            }
+                        }
+                        @media (min-width: 1048px) {
+                            .adslot_2 {
+                                width: 728px;
+                                height: 90px;
+                            }
+                        }
+                    </style>
+                    <ins
+                        class="adsbygoogle adslot_2"
+                        data-ad-client="ca-pub-0186014428427864"
+                        data-ad-slot="4291449630"
+                        data-adsbygoogle-status="done"
+                        ><iframe
+                            id="aswift_0"
+                            style="
+                                height: 1px !important;
+                                max-height: 1px !important;
+                                max-width: 1px !important;
+                                width: 1px !important;
+                            "
+                            ><iframe id="google_ads_frame0"></iframe></iframe
+                    ></ins>
+                    <script
+                        async=""
+                        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+                    ></script>
+                    <script>
+                        (adsbygoogle = window.adsbygoogle || []).push({});
+                    </script>
+                </div>
+                <div id="oglas1b">
+                    <style type="text/css">
+                        .adslot_3 {
+                            display: inline-block;
+                            width: 728px;
+                            height: 90px;
+                        }
+                        @media (max-width: 1792px) {
+                            .adslot_3 {
+                                display: none;
+                            }
+                        }
+                        @media (min-width: 1793px) {
+                            .adslot_3 {
+                                width: 728px;
+                                height: 90px;
+                            }
+                        }
+                    </style>
+                    <ins
+                        class="adsbygoogle adslot_3"
+                        data-ad-client="ca-pub-0186014428427864"
+                        data-ad-slot="5558932295"
+                        data-adsbygoogle-status="done"
+                        ><iframe
+                            id="aswift_1"
+                            style="
+                                height: 1px !important;
+                                max-height: 1px !important;
+                                max-width: 1px !important;
+                                width: 1px !important;
+                            "
+                            ><iframe id="google_ads_frame1"></iframe></iframe
+                    ></ins>
+                    <script
+                        async=""
+                        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+                    ></script>
+                    <script>
+                        (adsbygoogle = window.adsbygoogle || []).push({});
+                    </script>
+                </div>
+            </div>
+
+            <div class="main2">
+                <script type="text/javascript">
+                    function naprej(i, id) {
+                        let xy = document
+                            .getElementById("prva" + i)
+                            .getAttribute("data-value")
+                            .split("-")[1];
+                        if (
+                            !(
+                                parseInt(id) > parseInt(xy) &&
+                                document
+                                    .getElementById("prva" + i)
+                                    .innerHTML.indexOf('data-value="x"') !== -1
+                            )
+                        ) {
+                            document
+                                .getElementById("prva" + i)
+                                .classList.add("hide");
+                            //document.getElementById("prva" + i).style.visibility = "hidden";
+
+                            var xmlHttpn;
+                            try {
+                                xmlHttpn = new XMLHttpRequest();
+                            } catch (e) {
+                                try {
+                                    xmlHttpn = new ActiveXObject(
+                                        "Msxml2.XMLHTTP"
+                                    );
+                                } catch (e) {
+                                    try {
+                                        xmlHttpn = new ActiveXObject(
+                                            "Microsoft.XMLHTTP"
+                                        );
+                                    } catch (e) {
+                                        return false;
+                                    }
+                                }
+                            }
+                            xmlHttpn.onreadystatechange = function () {
+                                if (xmlHttpn.readyState == 4) {
+                                    document
+                                        .getElementById("prva" + i)
+                                        .classList.remove("hide");
+                                    document
+                                        .getElementById("prva" + i)
+                                        .setAttribute(
+                                            "data-value",
+                                            i + "-" + id
+                                        );
+                                    document.getElementById(
+                                        "prva" + i
+                                    ).innerHTML = xmlHttpn.responseText;
+                                    document.getElementById(
+                                        "prva" + i
+                                    ).style.visibility = "visible";
+                                    sessionStorage.setItem(
+                                        "SSprva" + i,
+                                        xmlHttpn.responseText
+                                    );
+                                }
+                            };
+                            xmlHttpn.open(
+                                "GET",
+                                "/ajaxprva.asp?i=" + i + "&id=" + id,
+                                true
+                            );
+                            xmlHttpn.setRequestHeader(
+                                "Cache-Control",
+                                "no-cache"
+                            );
+                            xmlHttpn.setRequestHeader("Pragma", "no-cache");
+                            xmlHttpn.setRequestHeader(
+                                "If-Modified-Since",
+                                "Sat, 1 Jan 2000 00:00:00 GMT"
+                            );
+                            xmlHttpn.send(null);
+                        }
+                    }
+
+                    function prvaSirina2() {
+                        if (window.innerWidth >= 1220) {
+                            if (
+                                document.getElementById("v1s2").innerHTML == ""
+                            ) {
+                                document.getElementById("v1s2").innerHTML =
+                                    document.getElementById("v2s1").innerHTML;
+                                document.getElementById("v1s3").innerHTML =
+                                    document.getElementById("v3s1").innerHTML;
+                                document.getElementById("v2s1").innerHTML =
+                                    document.getElementById("v4s1").innerHTML;
+                                document.getElementById("v2s2").innerHTML =
+                                    document.getElementById("v5s1").innerHTML;
+                                document.getElementById("v2s3").innerHTML =
+                                    document.getElementById("v6s1").innerHTML;
+                                document.getElementById("v3s1").innerHTML =
+                                    document.getElementById("v7s1").innerHTML;
+                                document.getElementById("v3s2").innerHTML =
+                                    document.getElementById("v8s1").innerHTML;
+                                document.getElementById("v3s3").innerHTML =
+                                    document.getElementById("v9s1").innerHTML;
+                                document.getElementById("v4s1").innerHTML = "";
+                                document.getElementById("v5s1").innerHTML = "";
+                                document.getElementById("v6s1").innerHTML = "";
+                                document.getElementById("v7s1").innerHTML = "";
+                                document.getElementById("v8s1").innerHTML = "";
+                                document.getElementById("v9s1").innerHTML = "";
+                            } else if (
+                                document.getElementById("v1s3").innerHTML == ""
+                            ) {
+                                document.getElementById("v1s3").innerHTML =
+                                    document.getElementById("v2s1").innerHTML;
+                                document.getElementById("v2s1").innerHTML =
+                                    document.getElementById("v2s2").innerHTML;
+                                document.getElementById("v2s2").innerHTML =
+                                    document.getElementById("v3s1").innerHTML;
+                                document.getElementById("v2s3").innerHTML =
+                                    document.getElementById("v3s2").innerHTML;
+                                document.getElementById("v3s1").innerHTML =
+                                    document.getElementById("v4s1").innerHTML;
+                                document.getElementById("v3s2").innerHTML =
+                                    document.getElementById("v4s2").innerHTML;
+                                document.getElementById("v3s3").innerHTML =
+                                    document.getElementById("v5s1").innerHTML;
+                                document.getElementById("v4s1").innerHTML = "";
+                                document.getElementById("v4s2").innerHTML = "";
+                                document.getElementById("v4s3").innerHTML = "";
+                                document.getElementById("v5s1").innerHTML = "";
+                                document.getElementById("v5s2").innerHTML = "";
+                                document.getElementById("v5s3").innerHTML = "";
+                            }
+                        } else if (window.innerWidth >= 950) {
+                            if (
+                                document.getElementById("v1s2").innerHTML ==
+                                    "" &&
+                                document.getElementById("v1s3").innerHTML == ""
+                            ) {
+                                document.getElementById("v1s2").innerHTML =
+                                    document.getElementById("v2s1").innerHTML;
+                                document.getElementById("v1s3").innerHTML = "";
+                                document.getElementById("v2s1").innerHTML =
+                                    document.getElementById("v3s1").innerHTML;
+                                document.getElementById("v2s2").innerHTML =
+                                    document.getElementById("v4s1").innerHTML;
+                                document.getElementById("v2s3").innerHTML = "";
+                                document.getElementById("v3s1").innerHTML =
+                                    document.getElementById("v5s1").innerHTML;
+                                document.getElementById("v3s2").innerHTML =
+                                    document.getElementById("v6s1").innerHTML;
+                                document.getElementById("v3s3").innerHTML = "";
+                                document.getElementById("v4s1").innerHTML =
+                                    document.getElementById("v7s1").innerHTML;
+                                document.getElementById("v4s2").innerHTML =
+                                    document.getElementById("v8s1").innerHTML;
+                                document.getElementById("v4s3").innerHTML = "";
+                                document.getElementById("v5s1").innerHTML =
+                                    document.getElementById("v9s1").innerHTML;
+                                document.getElementById("v5s2").innerHTML = "";
+                                document.getElementById("v5s3").innerHTML = "";
+                                document.getElementById("v6s1").innerHTML = "";
+                                document.getElementById("v7s1").innerHTML = "";
+                                document.getElementById("v8s1").innerHTML = "";
+                                document.getElementById("v9s1").innerHTML = "";
+                            } else if (
+                                document.getElementById("v1s3").innerHTML != ""
+                            ) {
+                                document.getElementById("v5s1").innerHTML =
+                                    document.getElementById("v3s3").innerHTML;
+                                document.getElementById("v4s2").innerHTML =
+                                    document.getElementById("v3s2").innerHTML;
+                                document.getElementById("v4s1").innerHTML =
+                                    document.getElementById("v3s1").innerHTML;
+
+                                document.getElementById("v3s2").innerHTML =
+                                    document.getElementById("v2s3").innerHTML;
+                                document.getElementById("v3s1").innerHTML =
+                                    document.getElementById("v2s2").innerHTML;
+                                document.getElementById("v2s2").innerHTML =
+                                    document.getElementById("v2s1").innerHTML;
+                                document.getElementById("v2s1").innerHTML =
+                                    document.getElementById("v1s3").innerHTML;
+                                document.getElementById("v1s2").innerHTML =
+                                    document.getElementById("v1s2").innerHTML;
+                                document.getElementById("v1s1").innerHTML =
+                                    document.getElementById("v1s1").innerHTML;
+                                document.getElementById("v1s3").innerHTML = "";
+                                document.getElementById("v2s3").innerHTML = "";
+                                document.getElementById("v3s3").innerHTML = "";
+                            }
+                        } else {
+                            if (
+                                document.getElementById("v1s2").innerHTML !=
+                                    "" &&
+                                document.getElementById("v1s3").innerHTML == ""
+                            ) {
+                                document.getElementById("v9s1").innerHTML =
+                                    document.getElementById("v5s1").innerHTML;
+                                document.getElementById("v8s1").innerHTML =
+                                    document.getElementById("v4s2").innerHTML;
+                                document.getElementById("v7s1").innerHTML =
+                                    document.getElementById("v4s1").innerHTML;
+                                document.getElementById("v6s1").innerHTML =
+                                    document.getElementById("v3s2").innerHTML;
+                                document.getElementById("v5s1").innerHTML =
+                                    document.getElementById("v3s1").innerHTML;
+                                document.getElementById("v4s1").innerHTML =
+                                    document.getElementById("v2s2").innerHTML;
+                                document.getElementById("v3s1").innerHTML =
+                                    document.getElementById("v2s1").innerHTML;
+                                document.getElementById("v2s1").innerHTML =
+                                    document.getElementById("v1s2").innerHTML;
+                                document.getElementById("v1s2").innerHTML = "";
+                                document.getElementById("v2s2").innerHTML = "";
+                                document.getElementById("v3s2").innerHTML = "";
+                                document.getElementById("v4s2").innerHTML = "";
+                            } else if (
+                                document.getElementById("v1s2").innerHTML !=
+                                    "" &&
+                                document.getElementById("v1s3").innerHTML != ""
+                            ) {
+                                document.getElementById("v9s1").innerHTML =
+                                    document.getElementById("v3s3").innerHTML;
+                                document.getElementById("v8s1").innerHTML =
+                                    document.getElementById("v3s2").innerHTML;
+                                document.getElementById("v7s1").innerHTML =
+                                    document.getElementById("v3s1").innerHTML;
+                                document.getElementById("v6s1").innerHTML =
+                                    document.getElementById("v2s3").innerHTML;
+                                document.getElementById("v5s1").innerHTML =
+                                    document.getElementById("v2s2").innerHTML;
+                                document.getElementById("v4s1").innerHTML =
+                                    document.getElementById("v2s1").innerHTML;
+                                document.getElementById("v3s1").innerHTML =
+                                    document.getElementById("v1s3").innerHTML;
+                                document.getElementById("v2s1").innerHTML =
+                                    document.getElementById("v1s2").innerHTML;
+                                document.getElementById("v1s2").innerHTML = "";
+                                document.getElementById("v1s3").innerHTML = "";
+                                document.getElementById("v2s2").innerHTML = "";
+                                document.getElementById("v2s3").innerHTML = "";
+                                document.getElementById("v3s2").innerHTML = "";
+                                document.getElementById("v3s3").innerHTML = "";
+                            }
+                        }
+                    }
+
+                    function prvaSirina() {
+                        if (
+                            window.innerWidth + 30 < menuS ||
+                            window.innerWidth - 30 > menuS
+                        ) {
+                            prvaSirina2();
+                        }
+                    }
+                </script>
+
+                <div style="clear: both">
+                    <table>
+                        <tbody>
+                            <tr>
+                                <td id="v1s1" class="vs">
+                                    <div class="stolpec1">
+                                        <div class="naslov1p">
+                                            <b
+                                                ><a href="/"
+                                                    >Novice in članki</a
+                                                ></b
+                                            >
+                                        </div>
+                                        <div
+                                            id="prva1"
+                                            data-value="1-0"
+                                            class="pc1"
+                                        >
+                                            <div>
+                                                <a
+                                                    href="/novica/ko_gora_ni_vec_zatocisce/4785"
+                                                    ><img
+                                                        class="slikamini"
+                                                        src="//slike2.hribi.net/slike14/2_0671825769317_0rrr.jpg" /></a
+                                                ><a
+                                                    href="/novica/ko_gora_ni_vec_zatocisce/4785"
+                                                    ><b
+                                                        >Ko gora ni več
+                                                        zatočišče</b
+                                                    ></a
+                                                ><br />O vlomih, kaznih in
+                                                komercializaciji »novega«
+                                                gorskega prostora Gorski svet je
+                                                bil z nastopom »turistike« dolgo
+                                                razumljen kot prostor, kjer
+                                                človek vsaj za nekaj ur odloži
+                                                skrbi vsakdana. Kjer se zrak...
+                                            </div>
+                                            <div style="clear: both"></div>
+                                            <div class="crta"></div>
+
+                                            <div>
+                                                <a
+                                                    href="/novica/anketa_pogled_s_kosenjaka/4784"
+                                                    ><img
+                                                        class="slikamini"
+                                                        src="//slike2.hribi.net/slike14/2_0631825763235_0kosenjak2.jpg" /></a
+                                                ><a
+                                                    href="/novica/anketa_pogled_s_kosenjaka/4784"
+                                                    ><b
+                                                        >Anketa: pogled s
+                                                        Košenjaka</b
+                                                    ></a
+                                                ><br />Vprašanje na minulo
+                                                anketo je bilo: Ali se s
+                                                Košenjaka (1522 m), vidi
+                                                Ojstrica (2350 m)? Pravilen o...
+                                            </div>
+                                            <div style="clear: both"></div>
+                                            <div class="crta"></div>
+
+                                            <div>
+                                                <a
+                                                    href="/novica/arheoloski_park_divje_babe_razglasen_za_spomenik/4783"
+                                                    ><img
+                                                        class="slikamini"
+                                                        src="//slike2.hribi.net/slike14/2_0651825670670_0db1.jpg" /></a
+                                                ><a
+                                                    href="/novica/arheoloski_park_divje_babe_razglasen_za_spomenik/4783"
+                                                    ><b
+                                                        >Arheološki park Divje
+                                                        Babe razglašen za
+                                                        spomenik...</b
+                                                    ></a
+                                                ><br />Arheološki park Divje
+                                                Babe razglašen za spomenik
+                                                državnega pomena. Vlada
+                                                Republike Slovenije je na ...
+                                            </div>
+                                            <div style="clear: both"></div>
+                                            <div class="crta"></div>
+
+                                            <div>
+                                                <a
+                                                    href="/novica/anketa_slivnica/4782"
+                                                    ><img
+                                                        class="slikamini"
+                                                        src="//slike2.hribi.net/slike14/2_0883825331219_0slivnica2.jpg" /></a
+                                                ><a
+                                                    href="/novica/anketa_slivnica/4782"
+                                                    ><b>Anketa: Slivnica</b></a
+                                                ><br />Vprašanje na minulo
+                                                anketo je bilo: Ali ste že bili
+                                                na Slivnici (1114 m)? Slivnica
+                                                je gora, ki se n...
+                                            </div>
+                                            <div style="clear: both"></div>
+                                            <div class="crta"></div>
+
+                                            <div>
+                                                <a
+                                                    href="/novica/anketa_cmir/4781"
+                                                    ><img
+                                                        class="slikamini"
+                                                        src="//slike2.hribi.net/slike14/2_1769825243815_1cmir2.jpg" /></a
+                                                ><a
+                                                    href="/novica/anketa_cmir/4781"
+                                                    ><b>Anketa: Cmir</b></a
+                                                ><br />Vprašanje na minulo
+                                                anketo je bilo: Kje se nahaja
+                                                Cmir (2393 m)? Pravilen odgovor
+                                                je: v Julijskih A...
+                                            </div>
+                                            <div style="clear: both"></div>
+                                            <div class="crta"></div>
+
+                                            <div class="prvarazmere1">
+                                                <img
+                                                    class="prvaarrow"
+                                                    title="Naslednjih 5 objav"
+                                                    style="cursor: pointer"
+                                                    src="/slike/arrow.png"
+                                                    onclick="naprej(1,5);"
+                                                />
+                                            </div>
+                                        </div>
+                                        <script>
+                                            if (
+                                                window.performance &&
+                                                window.performance.navigation
+                                                    .type ===
+                                                    window.performance
+                                                        .navigation
+                                                        .TYPE_BACK_FORWARD
+                                            ) {
+                                                if (
+                                                    sessionStorage.getItem(
+                                                        "SSprva1"
+                                                    ) != null
+                                                ) {
+                                                    document.getElementById(
+                                                        "prva1"
+                                                    ).innerHTML =
+                                                        sessionStorage.getItem(
+                                                            "SSprva1"
+                                                        );
+                                                }
+                                            } else {
+                                                sessionStorage.removeItem(
+                                                    "SSprva1"
+                                                );
+                                            }
+                                        </script>
+                                    </div>
+                                </td>
+                                <td id="v1s2" class="vs">
+                                    <div class="stolpec2">
+                                        <div class="naslov1p">
+                                            <b
+                                                ><a
+                                                    href="/trenutnerazmere.asp?slo=1"
+                                                    >Forum - Razmere</a
+                                                ></b
+                                            >
+                                        </div>
+                                        <div
+                                            id="prva2"
+                                            data-value="2-0"
+                                            class="pc1"
+                                        >
+                                            <div>
+                                                <a
+                                                    href="/trenutnerazmere.asp?slo=1&amp;gorovjeid=21&amp;id=878"
+                                                    ><img
+                                                        class="slikamini"
+                                                        src="//slike2.hribi.net/slike14/2_6740825937164_920260111_103315.jpg" /></a
+                                                ><a
+                                                    href="/trenutnerazmere.asp?slo=1&amp;gorovjeid=21&amp;id=878"
+                                                    ><b>Ratitovec</b></a
+                                                ><br />11.1.2026 -&gt; Železniki
+                                                - Ratitovec Prvi del strme poti
+                                                čez gozd ima zelo malo snega,
+                                                nekaj več ga je potem do
+                                                Draboslovice in naprej do
+                                                Prtovč...
+                                            </div>
+                                            <div style="clear: both"></div>
+                                            <div class="crta"></div>
+
+                                            <div>
+                                                <a
+                                                    href="/trenutnerazmere.asp?slo=1&amp;gorovjeid=5&amp;id=9198"
+                                                    ><img
+                                                        class="slikamini"
+                                                        src="//slike.hribi.net/slike19/2_1792825928923_20260110_162244.jpg" /></a
+                                                ><a
+                                                    href="/trenutnerazmere.asp?slo=1&amp;gorovjeid=5&amp;id=9198"
+                                                    ><b>Jeterbenk (774m)</b></a
+                                                ><br />Spet nekaj slikic za
+                                                prijatelje. Po dolgem času spet
+                                                smuka iz Jetrbenka. Kot sem že
+                                                zadnjič napisal ...
+                                            </div>
+                                            <div style="clear: both"></div>
+                                            <div class="crta"></div>
+
+                                            <div>
+                                                <a
+                                                    href="/trenutnerazmere.asp?slo=1&amp;gorovjeid=1&amp;id=1402"
+                                                    ><img
+                                                        class="slikamini"
+                                                        src="//slike2.hribi.net/slike14/2_0689825889826_0img_20260111_155123.jpg" /></a
+                                                ><a
+                                                    href="/trenutnerazmere.asp?slo=1&amp;gorovjeid=1&amp;id=1402"
+                                                    ><b>Matajur</b></a
+                                                ><br />Zapeljem se na Italjansko
+                                                stran in po asfaltni cesti do
+                                                koče, Na okoli po poteh,
+                                                Matajur, dol in na ...
+                                            </div>
+                                            <div style="clear: both"></div>
+                                            <div class="crta"></div>
+
+                                            <div>
+                                                <a
+                                                    href="/trenutnerazmere.asp?slo=1&amp;gorovjeid=3&amp;id=583"
+                                                    ><img
+                                                        class="slikamini"
+                                                        src="//slike2.hribi.net/slike14/2_0830825618250_02026_01_08_11.21.44.jpg" /></a
+                                                ><a
+                                                    href="/trenutnerazmere.asp?slo=1&amp;gorovjeid=3&amp;id=583"
+                                                    ><b>Velika planina</b></a
+                                                ><br />Tone, ti še vedno tak
+                                                šibaš , da je za tabo samo
+                                                pepel....
+                                            </div>
+                                            <div style="clear: both"></div>
+                                            <div class="crta"></div>
+
+                                            <div>
+                                                <a
+                                                    href="/trenutnerazmere.asp?slo=1&amp;gorovjeid=1&amp;id=780"
+                                                    ><img
+                                                        class="slikamini"
+                                                        src="//slike.hribi.net/slike19/2_0888825803480_IMG_6723.jpeg" /></a
+                                                ><a
+                                                    href="/trenutnerazmere.asp?slo=1&amp;gorovjeid=1&amp;id=780"
+                                                    ><b>Viševnik</b></a
+                                                ><br />Stanje 10.1.2026 Snega po
+                                                normalki ni veliko. Zadnji
+                                                zapadli sneg je v zgornjem delu
+                                                popolnoma sipek...
+                                            </div>
+                                            <div style="clear: both"></div>
+                                            <div class="crta"></div>
+
+                                            <div class="prvarazmere1">
+                                                <img
+                                                    class="prvaarrow"
+                                                    title="Naslednjih 5 objav"
+                                                    style="cursor: pointer"
+                                                    src="/slike/arrow.png"
+                                                    onclick="naprej(2,5);"
+                                                />
+                                            </div>
+                                        </div>
+                                        <script>
+                                            if (
+                                                window.performance &&
+                                                window.performance.navigation
+                                                    .type ===
+                                                    window.performance
+                                                        .navigation
+                                                        .TYPE_BACK_FORWARD
+                                            ) {
+                                                if (
+                                                    sessionStorage.getItem(
+                                                        "SSprva2"
+                                                    ) != null
+                                                ) {
+                                                    document.getElementById(
+                                                        "prva2"
+                                                    ).innerHTML =
+                                                        sessionStorage.getItem(
+                                                            "SSprva2"
+                                                        );
+                                                }
+                                            } else {
+                                                sessionStorage.removeItem(
+                                                    "SSprva2"
+                                                );
+                                            }
+                                        </script>
+                                    </div>
+                                </td>
+                                <td id="v1s3" class="vs">
+                                    <div class="stolpec3">
+                                        <div class="naslov1p">
+                                            <b>Komentirani izleti</b>
+                                        </div>
+                                        <div
+                                            id="prva3"
+                                            data-value="3-0"
+                                            class="pc1"
+                                        >
+                                            <div>
+                                                <a
+                                                    href="/pot.asp?gorovjeid=21&amp;id=1310&amp;potid=3562#diskusije"
+                                                    ><img
+                                                        class="slikamini"
+                                                        src="//www.hribi.net/slike1/Ratitovec1111 170333960.th.jpg" /></a
+                                                ><a
+                                                    href="/pot.asp?gorovjeid=21&amp;id=1310&amp;potid=3562#diskusije"
+                                                    ><b
+                                                        >Bohinjsko sedlo -
+                                                        Altemaver (Ratitovec)</b
+                                                    ></a
+                                                ><br />Gaza je na meji med
+                                                Egiptom in Palestino oz
+                                                Izraelom, pa še nekaj je je v
+                                                odpadkih iz operacijske
+                                                dvorane...
+                                            </div>
+                                            <div style="clear: both"></div>
+                                            <div class="crta"></div>
+
+                                            <div>
+                                                <a
+                                                    href="/pot.asp?gorovjeid=1&amp;id=3520&amp;potid=8520#diskusije"
+                                                    ><img
+                                                        class="slikamini"
+                                                        src="//slike.hribi.net/slike16/2_1648705006192_6.jpg" /></a
+                                                ><a
+                                                    href="/pot.asp?gorovjeid=1&amp;id=3520&amp;potid=8520#diskusije"
+                                                    ><b
+                                                        >Ravne - Lisc (Lisec)</b
+                                                    ></a
+                                                ><br />Ima mogoče kdo sveže
+                                                zimske informacije?...
+                                            </div>
+                                            <div style="clear: both"></div>
+                                            <div class="crta"></div>
+
+                                            <div>
+                                                <a
+                                                    href="/pot.asp?gorovjeid=1&amp;id=286&amp;potid=406#diskusije"
+                                                    ><img
+                                                        class="slikamini"
+                                                        src="//www.hribi.net/slike1/TamarKrnica 094169920.th.jpg" /></a
+                                                ><a
+                                                    href="/pot.asp?gorovjeid=1&amp;id=286&amp;potid=406#diskusije"
+                                                    ><b
+                                                        >NC Planica - Dom v
+                                                        Tamarju (po cesti)</b
+                                                    ></a
+                                                ><br />
+                                                A.D.K. ENA izmed definicij:
+                                                »Diskurz je sistem prikazovanja,
+                                                ki se razvije v družbi in
+                                                omogoča usk...
+                                            </div>
+                                            <div style="clear: both"></div>
+                                            <div class="crta"></div>
+
+                                            <div>
+                                                <a
+                                                    href="/pot.asp?gorovjeid=3&amp;id=281&amp;potid=401#diskusije"
+                                                    ><img
+                                                        class="slikamini"
+                                                        src="//www.hribi.net/Pot/pb260066mediumvj7.th.jpg" /></a
+                                                ><a
+                                                    href="/pot.asp?gorovjeid=3&amp;id=281&amp;potid=401#diskusije"
+                                                    ><b
+                                                        >Kanonir - Kozji vrh</b
+                                                    ></a
+                                                ><br />Manj znan in samoten je
+                                                tale Kozji vrh, ravno zato me je
+                                                najbrž pritegnil. Pot poteka
+                                                večinoma v pre...
+                                            </div>
+                                            <div style="clear: both"></div>
+                                            <div class="crta"></div>
+
+                                            <div>
+                                                <a
+                                                    href="/pot.asp?gorovjeid=61&amp;id=4377&amp;potid=10664#diskusije"
+                                                    ><img
+                                                        class="slikamini"
+                                                        src="//slike2.hribi.net/slike14/2_9325824857898_1420251018_105735.jpg" /></a
+                                                ><a
+                                                    href="/pot.asp?gorovjeid=61&amp;id=4377&amp;potid=10664#diskusije"
+                                                    ><b
+                                                        >Sošice - Planinska koča
+                                                        Vodice
+                                                    </b></a
+                                                ><br />Ova koča je već neko
+                                                vreme zaprta, a ona u Sekulićima
+                                                je odprta samo po dogovoru s
+                                                planinskim društv...
+                                            </div>
+                                            <div style="clear: both"></div>
+                                            <div class="crta"></div>
+
+                                            <div class="prvarazmere1">
+                                                <img
+                                                    class="prvaarrow"
+                                                    title="Naslednjih 5 objav"
+                                                    style="cursor: pointer"
+                                                    src="/slike/arrow.png"
+                                                    onclick="naprej(3,5);"
+                                                />
+                                            </div>
+                                        </div>
+                                        <script>
+                                            if (
+                                                window.performance &&
+                                                window.performance.navigation
+                                                    .type ===
+                                                    window.performance
+                                                        .navigation
+                                                        .TYPE_BACK_FORWARD
+                                            ) {
+                                                if (
+                                                    sessionStorage.getItem(
+                                                        "SSprva3"
+                                                    ) != null
+                                                ) {
+                                                    document.getElementById(
+                                                        "prva3"
+                                                    ).innerHTML =
+                                                        sessionStorage.getItem(
+                                                            "SSprva3"
+                                                        );
+                                                }
+                                            } else {
+                                                sessionStorage.removeItem(
+                                                    "SSprva3"
+                                                );
+                                            }
+                                        </script>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td id="v2s1" class="vs">
+                                    <div class="stolpec1">
+                                        <div class="naslov1p">
+                                            <b
+                                                ><a
+                                                    href="/trenutnerazmere.asp?slo=1&amp;gorovjeid=10001"
+                                                    >Splošni pogovori</a
+                                                ></b
+                                            >
+                                        </div>
+                                        <div
+                                            id="prva4"
+                                            data-value="4-0"
+                                            class="pc1"
+                                        >
+                                            <div>
+                                                <a
+                                                    href="/trenutnerazmere.asp?slo=1&amp;gorovjeid=10001&amp;id=3273"
+                                                    ><img
+                                                        class="slikamini"
+                                                        src="//slike.hribi.net/slike19/2_0535825952707_IMG_20251104_132635.jpg" /></a
+                                                ><a
+                                                    href="/trenutnerazmere.asp?slo=1&amp;gorovjeid=10001&amp;id=3273"
+                                                    ><b
+                                                        >Uganka brez prestanka
+                                                        za začetnike 2</b
+                                                    ></a
+                                                ><br />Nadaljuje djimuzl....
+                                            </div>
+                                            <div style="clear: both"></div>
+                                            <div class="crta"></div>
+
+                                            <div>
+                                                <a
+                                                    href="/trenutnerazmere.asp?slo=1&amp;gorovjeid=10001&amp;id=2869"
+                                                    ><img
+                                                        class="slikamini"
+                                                        src="//slike.hribi.net/slike19/2_0820825948656_DSCN5880.JPG" /></a
+                                                ><a
+                                                    href="/trenutnerazmere.asp?slo=1&amp;gorovjeid=10001&amp;id=2869"
+                                                    ><b
+                                                        >Splošna uganka brez
+                                                        prestanka!</b
+                                                    ></a
+                                                ><br />Tako je, iz Rajblja po
+                                                poti št. 511. Nadaljuj ...
+                                            </div>
+                                            <div style="clear: both"></div>
+                                            <div class="crta"></div>
+
+                                            <div>
+                                                <a
+                                                    href="/trenutnerazmere.asp?slo=1&amp;gorovjeid=10001&amp;id=1967"
+                                                    ><img
+                                                        class="slikamini"
+                                                        src="//slike.hribi.net/slike19/2_0177825945482_20260112_120813.jpg" /></a
+                                                ><a
+                                                    href="/trenutnerazmere.asp?slo=1&amp;gorovjeid=10001&amp;id=1967"
+                                                    ><b>Obnašanje živali</b></a
+                                                ><br />Danes na sprehodu, ni
+                                                fotomontaža, pa tudi UI nima nič
+                                                zraven,...
+                                            </div>
+                                            <div style="clear: both"></div>
+                                            <div class="crta"></div>
+
+                                            <div>
+                                                <a
+                                                    href="/trenutnerazmere.asp?slo=1&amp;gorovjeid=10001&amp;id=7334"
+                                                    ><img
+                                                        class="slikamini"
+                                                        src="//slike.hribi.net/slike19/2_0439825668743_DSC00295a.JPG" /></a
+                                                ><a
+                                                    href="/trenutnerazmere.asp?slo=1&amp;gorovjeid=10001&amp;id=7334"
+                                                    ><b>Nesplošna uganka</b></a
+                                                ><br />
+                                                Kar nadaljujte......
+                                            </div>
+                                            <div style="clear: both"></div>
+                                            <div class="crta"></div>
+
+                                            <div>
+                                                <a
+                                                    href="/trenutnerazmere.asp?slo=1&amp;gorovjeid=10001&amp;id=8602"
+                                                    ><img
+                                                        class="slikamini"
+                                                        src="//slike.hribi.net/slike19/2_0437825874022_DSC00121.JPG" /></a
+                                                ><a
+                                                    href="/trenutnerazmere.asp?slo=1&amp;gorovjeid=10001&amp;id=8602"
+                                                    ><b
+                                                        >Utrinki s sprehodov</b
+                                                    ></a
+                                                ><br />Z današnjega sprehoda ...
+                                            </div>
+                                            <div style="clear: both"></div>
+                                            <div class="crta"></div>
+
+                                            <div class="prvarazmere1">
+                                                <img
+                                                    class="prvaarrow"
+                                                    title="Naslednjih 5 objav"
+                                                    style="cursor: pointer"
+                                                    src="/slike/arrow.png"
+                                                    onclick="naprej(4,5);"
+                                                />
+                                            </div>
+                                        </div>
+                                        <script>
+                                            if (
+                                                window.performance &&
+                                                window.performance.navigation
+                                                    .type ===
+                                                    window.performance
+                                                        .navigation
+                                                        .TYPE_BACK_FORWARD
+                                            ) {
+                                                if (
+                                                    sessionStorage.getItem(
+                                                        "SSprva4"
+                                                    ) != null
+                                                ) {
+                                                    document.getElementById(
+                                                        "prva4"
+                                                    ).innerHTML =
+                                                        sessionStorage.getItem(
+                                                            "SSprva4"
+                                                        );
+                                                }
+                                            } else {
+                                                sessionStorage.removeItem(
+                                                    "SSprva4"
+                                                );
+                                            }
+                                        </script>
+                                    </div>
+                                </td>
+                                <td id="v2s2" class="vs">
+                                    <div class="stolpec2">
+                                        <div class="naslov1p">
+                                            <b>Novi izleti</b>
+                                        </div>
+                                        <div
+                                            id="prva5"
+                                            data-value="5-0"
+                                            class="pc1"
+                                        >
+                                            <div>
+                                                <a
+                                                    href="/pot.asp?gorovjeid=61&amp;id=4383&amp;potid=10671"
+                                                    ><img
+                                                        class="slikamini"
+                                                        src="//slike2.hribi.net/slike14/2_16845825464234_820251018_130418.jpg" /></a
+                                                ><a
+                                                    href="/pot.asp?gorovjeid=61&amp;id=4383&amp;potid=10671"
+                                                    ><b
+                                                        >Sošice - Ječmište (čez
+                                                        Pliješ)</b
+                                                    ></a
+                                                ><br />Ječmište je travnat vrh
+                                                nad Žumberakom, v bližini
+                                                Slovenije, na Žumberački gori.
+                                                Vrh je točka HPO, ter Karlovačke
+                                                obilaznice. Z vrha, ki ima
+                                                klopco in vpisno skrinjico,
+                                                zaradi bližnjega gozda ni
+                                                razgl...
+                                            </div>
+                                            <div style="clear: both"></div>
+                                            <div class="crta"></div>
+
+                                            <div>
+                                                <a
+                                                    href="/pot.asp?gorovjeid=28&amp;id=4317&amp;potid=10536"
+                                                    ><img
+                                                        class="slikamini"
+                                                        src="//slike2.hribi.net/slike14/2_3698818610295_3dscn3213.jpg" /></a
+                                                ><a
+                                                    href="/pot.asp?gorovjeid=28&amp;id=4317&amp;potid=10536"
+                                                    ><b
+                                                        >Reichenfels (most čez
+                                                        Labotnico / Lavant) -
+                                                        Peterer Kogel (skozi
+                                                        Höllgraben)</b
+                                                    ></a
+                                                ><br />Peterer Kogel je
+                                                razgleden travnat vrh, ki se
+                                                nahaja v gorski skupini
+                                                Packalpe, v bližini nekoliko
+                                                v...
+                                            </div>
+                                            <div style="clear: both"></div>
+                                            <div class="crta"></div>
+
+                                            <div>
+                                                <a
+                                                    href="/pot.asp?gorovjeid=162&amp;id=4131&amp;potid=10658"
+                                                    ><img
+                                                        class="slikamini"
+                                                        src="//slike2.hribi.net/slike14/2_5376824128260_2dscn6798.jpg" /></a
+                                                ><a
+                                                    href="/pot.asp?gorovjeid=162&amp;id=4131&amp;potid=10658"
+                                                    ><b
+                                                        >Hrastovec v Slovenskih
+                                                        goricah - Črni križ pri
+                                                        Hrastovcu</b
+                                                    ></a
+                                                ><br />Črni križ pri Hrastovcu
+                                                se nahaja v bližini naselja
+                                                Lormanje. Križ je bil postavljen
+                                                v spomin na Aga...
+                                            </div>
+                                            <div style="clear: both"></div>
+                                            <div class="crta"></div>
+
+                                            <div>
+                                                <a
+                                                    href="/pot.asp?gorovjeid=28&amp;id=3795&amp;potid=10530"
+                                                    ><img
+                                                        class="slikamini"
+                                                        src="//slike.hribi.net/slike214/2_11590747314204_11dscn5548.jpg" /></a
+                                                ><a
+                                                    href="/pot.asp?gorovjeid=28&amp;id=3795&amp;potid=10530"
+                                                    ><b
+                                                        >Hirschegg - Hirschegger
+                                                        Alm (severni vrh) (mimo
+                                                        koče Bernsteinhütte)</b
+                                                    ></a
+                                                ><br />Hirschegger Alm (severni
+                                                vrh) je 1871 metrov visok vrh,
+                                                ki se nahaja v gorski skupini
+                                                Packalpe. S tr...
+                                            </div>
+                                            <div style="clear: both"></div>
+                                            <div class="crta"></div>
+
+                                            <div>
+                                                <a
+                                                    href="/pot.asp?gorovjeid=1&amp;id=4345&amp;potid=10591"
+                                                    ><img
+                                                        class="slikamini"
+                                                        src="//slike2.hribi.net/slike14/2_4929821284707_2p1340014.jpg" /></a
+                                                ><a
+                                                    href="/pot.asp?gorovjeid=1&amp;id=4345&amp;potid=10591"
+                                                    ><b
+                                                        >Štupca / Stupizza -
+                                                        Planina Mija (skozi
+                                                        Pradol)</b
+                                                    ></a
+                                                ><br />Planina Mija (Ricovero
+                                                Casera Monte Mia) se nahaja
+                                                zahodno od vrha Mija nad dolino
+                                                Pradol. Do planin...
+                                            </div>
+                                            <div style="clear: both"></div>
+                                            <div class="crta"></div>
+
+                                            <div class="prvarazmere1">
+                                                <img
+                                                    class="prvaarrow"
+                                                    title="Naslednjih 5 objav"
+                                                    style="cursor: pointer"
+                                                    src="/slike/arrow.png"
+                                                    onclick="naprej(5,5);"
+                                                />
+                                            </div>
+                                        </div>
+                                        <script>
+                                            if (
+                                                window.performance &&
+                                                window.performance.navigation
+                                                    .type ===
+                                                    window.performance
+                                                        .navigation
+                                                        .TYPE_BACK_FORWARD
+                                            ) {
+                                                if (
+                                                    sessionStorage.getItem(
+                                                        "SSprva5"
+                                                    ) != null
+                                                ) {
+                                                    document.getElementById(
+                                                        "prva5"
+                                                    ).innerHTML =
+                                                        sessionStorage.getItem(
+                                                            "SSprva5"
+                                                        );
+                                                }
+                                            } else {
+                                                sessionStorage.removeItem(
+                                                    "SSprva5"
+                                                );
+                                            }
+                                        </script>
+                                    </div>
+                                </td>
+                                <td id="v2s3" class="vs">
+                                    <div class="stolpec3">
+                                        <div class="naslov1p">
+                                            <b
+                                                ><a href="/mali_oglasi"
+                                                    >Mali oglasi</a
+                                                ></b
+                                            >
+                                        </div>
+                                        <div
+                                            id="prva6"
+                                            data-value="6-0"
+                                            class="pc1"
+                                        >
+                                            <div>
+                                                <a
+                                                    href="/malioglasi.asp?id=8720"
+                                                    ><b
+                                                        >Prodam - županje
+                                                        njive17a</b
+                                                    ></a
+                                                ><br />Če koga zanima dam za 2kg
+                                                kave...
+                                            </div>
+                                            <div style="clear: both"></div>
+                                            <div class="crta"></div>
+
+                                            <div>
+                                                <a
+                                                    href="/malioglasi.asp?id=8719"
+                                                    ><img
+                                                        class="slikamini"
+                                                        src="//slike2.hribi.net/slike14/2_0761825853343_0img_20251112_082906.jpg" /></a
+                                                ><a
+                                                    href="/malioglasi.asp?id=8719"
+                                                    ><b
+                                                        >Prodam - Softshell Ž
+                                                        hlače št.38</b
+                                                    ></a
+                                                ><br />Softshell zimske
+                                                pohodniske hlače znamke Regatta.
+                                                Znotraj flis, tople, nove.
+                                                Prodam zaradi prevelike...
+                                            </div>
+                                            <div style="clear: both"></div>
+                                            <div class="crta"></div>
+
+                                            <div>
+                                                <a
+                                                    href="/malioglasi.asp?id=8716"
+                                                    ><img
+                                                        class="slikamini"
+                                                        src="//slike2.hribi.net/slike16/2_0878825587460_polavtomatske_dereze_grivel_g12_slika_58455551.jpg" /></a
+                                                ><a
+                                                    href="/malioglasi.asp?id=8716"
+                                                    ><b
+                                                        >Prodam - Polavtomatske
+                                                        dereze Grivel G12</b
+                                                    ></a
+                                                ><br />Ja, vse drži in omenjene
+                                                smeri je še dokaj lagodno mogoče
+                                                preplezati s takimi derezami.
+                                                Opomba samo ...
+                                            </div>
+                                            <div style="clear: both"></div>
+                                            <div class="crta"></div>
+
+                                            <div>
+                                                <a
+                                                    href="/malioglasi.asp?id=8718"
+                                                    ><img
+                                                        class="slikamini"
+                                                        src="//slike2.hribi.net/slike16/2_0887825616974_20260108_174814.jpg" /></a
+                                                ><a
+                                                    href="/malioglasi.asp?id=8718"
+                                                    ><b
+                                                        >Prodam - La sportiva
+                                                        Nepal extreme 42.5</b
+                                                    ></a
+                                                ><br />Rabljeni na šestih turah.
+                                                Kopito mi ne ustreza....
+                                            </div>
+                                            <div style="clear: both"></div>
+                                            <div class="crta"></div>
+
+                                            <div>
+                                                <a
+                                                    href="/malioglasi.asp?id=8717"
+                                                    ><img
+                                                        class="slikamini"
+                                                        src="//slike2.hribi.net/slike16/2_0834825596980_1000016985.jpg" /></a
+                                                ><a
+                                                    href="/malioglasi.asp?id=8717"
+                                                    ><b
+                                                        >Prodam - Prodam ledna
+                                                        cepina Grivel
+                                                        Taa-K-oon</b
+                                                    ></a
+                                                ><br />Ledna cepina, že precej v
+                                                letih, samo parkrat uporabljena,
+                                                zato dobro ohranjena. Konice
+                                                nepoškodovan...
+                                            </div>
+                                            <div style="clear: both"></div>
+                                            <div class="crta"></div>
+
+                                            <div class="prvarazmere1">
+                                                <img
+                                                    class="prvaarrow"
+                                                    title="Naslednjih 5 objav"
+                                                    style="cursor: pointer"
+                                                    src="/slike/arrow.png"
+                                                    onclick="naprej(6,5);"
+                                                />
+                                            </div>
+                                        </div>
+                                        <script>
+                                            if (
+                                                window.performance &&
+                                                window.performance.navigation
+                                                    .type ===
+                                                    window.performance
+                                                        .navigation
+                                                        .TYPE_BACK_FORWARD
+                                            ) {
+                                                if (
+                                                    sessionStorage.getItem(
+                                                        "SSprva6"
+                                                    ) != null
+                                                ) {
+                                                    document.getElementById(
+                                                        "prva6"
+                                                    ).innerHTML =
+                                                        sessionStorage.getItem(
+                                                            "SSprva6"
+                                                        );
+                                                }
+                                            } else {
+                                                sessionStorage.removeItem(
+                                                    "SSprva6"
+                                                );
+                                            }
+                                        </script>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td id="v3s1" class="vs">
+                                    <div class="stolpec1">
+                                        <div class="naslov1p">
+                                            <b
+                                                ><a
+                                                    href="/spletne_kamere_v_gorah"
+                                                    >Spletne kamere</a
+                                                ></b
+                                            >
+                                        </div>
+                                        <div
+                                            id="prva7"
+                                            data-value="7-0"
+                                            class="pc1"
+                                        >
+                                            <div>
+                                                <a
+                                                    href="/spletna_kamera/kesselalm/5822"
+                                                    ><b>Kesselalm</b></a
+                                                ><br />Nemčija
+                                            </div>
+                                            <div style="clear: both"></div>
+                                            <div class="crta"></div>
+
+                                            <div>
+                                                <a
+                                                    href="/spletna_kamera/balderschwang_hochschelpen/5821"
+                                                    ><b
+                                                        >Balderschwang
+                                                        (Hochschelpen)</b
+                                                    ></a
+                                                ><br />Nemčija
+                                            </div>
+                                            <div style="clear: both"></div>
+                                            <div class="crta"></div>
+
+                                            <div>
+                                                <a
+                                                    href="/spletna_kamera/kohlhaukuppe_geisingberg/5819"
+                                                    ><b
+                                                        >Kohlhaukuppe
+                                                        (Geisingberg)</b
+                                                    ></a
+                                                ><br />Nemčija
+                                            </div>
+                                            <div style="clear: both"></div>
+                                            <div class="crta"></div>
+
+                                            <div>
+                                                <a
+                                                    href="/spletna_kamera/monte_cesen/5814"
+                                                    ><b>Monte Cesen</b></a
+                                                ><br />Italija
+                                            </div>
+                                            <div style="clear: both"></div>
+                                            <div class="crta"></div>
+
+                                            <div>
+                                                <a
+                                                    href="/spletna_kamera/rifugio_col_visentin/5811"
+                                                    ><b
+                                                        >Rifugio Col Visentin</b
+                                                    ></a
+                                                ><br />Italija
+                                            </div>
+                                            <div style="clear: both"></div>
+                                            <div class="crta"></div>
+
+                                            <div class="prvarazmere1">
+                                                <img
+                                                    class="prvaarrow"
+                                                    title="Naslednjih 5 kamer"
+                                                    style="cursor: pointer"
+                                                    src="/slike/arrow.png"
+                                                    onclick="naprej(7,5);"
+                                                />
+                                            </div>
+                                        </div>
+                                        <script>
+                                            if (
+                                                window.performance &&
+                                                window.performance.navigation
+                                                    .type ===
+                                                    window.performance
+                                                        .navigation
+                                                        .TYPE_BACK_FORWARD
+                                            ) {
+                                                if (
+                                                    sessionStorage.getItem(
+                                                        "SSprva7"
+                                                    ) != null
+                                                ) {
+                                                    document.getElementById(
+                                                        "prva7"
+                                                    ).innerHTML =
+                                                        sessionStorage.getItem(
+                                                            "SSprva7"
+                                                        );
+                                                }
+                                            } else {
+                                                sessionStorage.removeItem(
+                                                    "SSprva7"
+                                                );
+                                            }
+                                        </script>
+                                        <div
+                                            style="margin-top: 10px"
+                                            class="naslov1p"
+                                        >
+                                            <b
+                                                ><a href="/gorske_panorame"
+                                                    >Panorame</a
+                                                ></b
+                                            >
+                                        </div>
+                                        <div
+                                            id="prva8"
+                                            data-value="8-0"
+                                            class="pc1"
+                                        >
+                                            <div>
+                                                <a
+                                                    href="/panorama/360/sv_louronac___san_lorenzo/4333"
+                                                    ><b
+                                                        >Sv. Louronac / San
+                                                        Lorenzo</b
+                                                    ></a
+                                                ><br />Julijske Alpe
+                                            </div>
+                                            <div style="clear: both"></div>
+                                            <div class="crta"></div>
+
+                                            <div>
+                                                <a
+                                                    href="/panorama/360/zajavor/4321"
+                                                    ><b>Zajavor</b></a
+                                                ><br />Julijske Alpe
+                                            </div>
+                                            <div style="clear: both"></div>
+                                            <div class="crta"></div>
+
+                                            <div>
+                                                <a
+                                                    href="/panorama/360/velika_kuhinja/4307"
+                                                    ><b>Velika Kuhinja</b></a
+                                                ><br />Julijske Alpe
+                                            </div>
+                                            <div style="clear: both"></div>
+                                            <div class="crta"></div>
+
+                                            <div>
+                                                <a
+                                                    href="/panorama/360/planina_baban/4290"
+                                                    ><b>Planina Baban</b></a
+                                                ><br />Julijske Alpe
+                                            </div>
+                                            <div style="clear: both"></div>
+                                            <div class="crta"></div>
+
+                                            <div>
+                                                <a
+                                                    href="/panorama/360/vrh_zlebi/4324"
+                                                    ><b>Vrh Žlebi</b></a
+                                                ><br />Julijske Alpe
+                                            </div>
+                                            <div style="clear: both"></div>
+                                            <div class="crta"></div>
+
+                                            <div class="prvarazmere1">
+                                                <img
+                                                    class="prvaarrow"
+                                                    title="Naslednjih 5 panoram"
+                                                    style="cursor: pointer"
+                                                    src="/slike/arrow.png"
+                                                    onclick="naprej(8,5);"
+                                                />
+                                            </div>
+                                        </div>
+                                        <script>
+                                            if (
+                                                window.performance &&
+                                                window.performance.navigation
+                                                    .type ===
+                                                    window.performance
+                                                        .navigation
+                                                        .TYPE_BACK_FORWARD
+                                            ) {
+                                                if (
+                                                    sessionStorage.getItem(
+                                                        "SSprva8"
+                                                    ) != null
+                                                ) {
+                                                    document.getElementById(
+                                                        "prva8"
+                                                    ).innerHTML =
+                                                        sessionStorage.getItem(
+                                                            "SSprva8"
+                                                        );
+                                                }
+                                            } else {
+                                                sessionStorage.removeItem(
+                                                    "SSprva8"
+                                                );
+                                            }
+                                        </script>
+                                    </div>
+                                </td>
+                                <td id="v3s2" class="vs">
+                                    <div class="stolpec2">
+                                        <div class="naslov1p">
+                                            <b>Naključen izlet</b>
+                                        </div>
+                                        <div
+                                            id="prva9"
+                                            data-value="9-0"
+                                            class="pc1"
+                                        >
+                                            <div>
+                                                <a
+                                                    href="/gora/jezerski_vrh/1/515"
+                                                    ><img
+                                                        class="slikamini"
+                                                        src="//slike.hribi.net/slike214/2_129723369058_1dscn2804.jpg" /></a
+                                                ><a
+                                                    href="/gora/jezerski_vrh/1/515"
+                                                    ><b>Jezerski vrh</b></a
+                                                ><br />Jezerski vrh se nahaja na
+                                                Ribniškem Pohorju v bližini
+                                                Ribniške koče. Zaradi
+                                                neporaščenega vrha je lep
+                                                razgled po Pohorju in delu
+                                                štajerske. Na vrhu je postavljen
+                                                spomenik in nekaj klopi....
+                                            </div>
+                                            <div style="clear: both"></div>
+                                            <div class="crta"></div>
+
+                                            <div>
+                                                <a
+                                                    href="/izlet/koca_na_pesku_jezerski_vrh_mimo_lovrenskih_jezer/1/515/875"
+                                                    ><b
+                                                        >Koča na Pesku (mimo
+                                                        Lovrenških jezer)</b
+                                                    ></a
+                                                ><br />3 h 20 min
+                                            </div>
+                                            <div style="clear: both"></div>
+                                            <div class="crta"></div>
+
+                                            <div>
+                                                <a
+                                                    href="/izlet/rogla_hotel_planja_jezerski_vrh_mimo_lovrenskih_jezer/1/515/876"
+                                                    ><b
+                                                        >Rogla (Hotel Planja)
+                                                        (mimo Lovrenških
+                                                        jezer)</b
+                                                    ></a
+                                                ><br />3 h 15 min
+                                            </div>
+                                            <div style="clear: both"></div>
+                                            <div class="crta"></div>
+
+                                            <div class="prvarazmere1">
+                                                <img
+                                                    class="prvaarrow"
+                                                    title="Naslednji"
+                                                    style="cursor: pointer"
+                                                    src="/slike/arrow.png"
+                                                    onclick="naprej(9,5);"
+                                                />
+                                            </div>
+                                        </div>
+                                        <script>
+                                            if (
+                                                window.performance &&
+                                                window.performance.navigation
+                                                    .type ===
+                                                    window.performance
+                                                        .navigation
+                                                        .TYPE_BACK_FORWARD
+                                            ) {
+                                                if (
+                                                    sessionStorage.getItem(
+                                                        "SSprva9"
+                                                    ) != null
+                                                ) {
+                                                    document.getElementById(
+                                                        "prva9"
+                                                    ).innerHTML =
+                                                        sessionStorage.getItem(
+                                                            "SSprva9"
+                                                        );
+                                                }
+                                            } else {
+                                                sessionStorage.removeItem(
+                                                    "SSprva9"
+                                                );
+                                            }
+                                        </script>
+
+                                        <div
+                                            style="margin-top: 10px"
+                                            class="naslov1p"
+                                        >
+                                            <b
+                                                ><a href="/gps.asp"
+                                                    >GPS sledi</a
+                                                ></b
+                                            >
+                                        </div>
+                                        <div
+                                            id="prva10"
+                                            data-value="10-0"
+                                            class="pc1"
+                                        >
+                                            <div>
+                                                <a href="/gps.asp?sledid=4274"
+                                                    ><b
+                                                        >nad krajem Žabče, cesta
+                                                        za Tolminske Ravne -
+                                                        Poloje (Žabče -
+                                                        Poloje)</b
+                                                    ></a
+                                                ><br />Julijske Alpe
+                                            </div>
+                                            <div style="clear: both"></div>
+                                            <div class="crta"></div>
+
+                                            <div>
+                                                <a href="/gps.asp?sledid=4273"
+                                                    ><b
+                                                        >Lokve - Škol
+                                                        (Lokve-Škol)</b
+                                                    ></a
+                                                ><br />Goriško, Notranjsko in
+                                                Snežniško hribovje
+                                            </div>
+                                            <div style="clear: both"></div>
+                                            <div class="crta"></div>
+
+                                            <div>
+                                                <a href="/gps.asp?sledid=4272"
+                                                    ><b
+                                                        >Ljubelj - Vrh
+                                                        Ljubeljščice
+                                                        (Triangel)</b
+                                                    ></a
+                                                ><br />Karavanke
+                                            </div>
+                                            <div style="clear: both"></div>
+                                            <div class="crta"></div>
+
+                                            <div>
+                                                <a href="/gps.asp?sledid=4271"
+                                                    ><b
+                                                        >Pri Babi (Idrija) -
+                                                        Hleviška planina (Pri
+                                                        Babi-Pšenk-Hleviška
+                                                        planina)</b
+                                                    ></a
+                                                ><br />Škofjeloško, Cerkljansko
+                                                hribovje in Jelovica
+                                            </div>
+                                            <div style="clear: both"></div>
+                                            <div class="crta"></div>
+
+                                            <div>
+                                                <a href="/gps.asp?sledid=4270"
+                                                    ><b
+                                                        >Spodnje Belopeško
+                                                        jezero - Mala Ponca (513
+                                                        gor, 512 dol)</b
+                                                    ></a
+                                                ><br />Julijske Alpe
+                                            </div>
+                                            <div style="clear: both"></div>
+                                            <div class="crta"></div>
+
+                                            <div class="prvarazmere1">
+                                                <img
+                                                    class="prvaarrow"
+                                                    title="Naslednjih 5 GPS sledi"
+                                                    style="cursor: pointer"
+                                                    src="/slike/arrow.png"
+                                                    onclick="naprej(10,5);"
+                                                />
+                                            </div>
+                                        </div>
+                                        <script>
+                                            if (
+                                                window.performance &&
+                                                window.performance.navigation
+                                                    .type ===
+                                                    window.performance
+                                                        .navigation
+                                                        .TYPE_BACK_FORWARD
+                                            ) {
+                                                if (
+                                                    sessionStorage.getItem(
+                                                        "SSprva10"
+                                                    ) != null
+                                                ) {
+                                                    document.getElementById(
+                                                        "prva10"
+                                                    ).innerHTML =
+                                                        sessionStorage.getItem(
+                                                            "SSprva10"
+                                                        );
+                                                }
+                                            } else {
+                                                sessionStorage.removeItem(
+                                                    "SSprva10"
+                                                );
+                                            }
+                                        </script>
+                                    </div>
+                                </td>
+                                <td id="v3s3" class="vs">
+                                    <div class="stolpec3">
+                                        <div class="naslov1p">
+                                            <b
+                                                ><a href="/prireditve.asp"
+                                                    >Prireditve</a
+                                                ></b
+                                            >
+                                        </div>
+                                        <div
+                                            id="prva11"
+                                            data-value="11-0"
+                                            class="pc1"
+                                        >
+                                            <div>
+                                                <a href="/prireditve.asp#19647"
+                                                    ><b>VINCEKOV POHOD</b></a
+                                                ><br />PD ZZV CELJE VABI V
+                                                NEDELJO, 18. JANUARJA 2026, OB
+                                                6.00 URI NA GLAZIJI Planinsko
+                                                društvo BUNDEK iz ...
+                                            </div>
+                                            <div style="clear: both"></div>
+                                            <div class="crta"></div>
+
+                                            <div>
+                                                <a href="/prireditve.asp#19634"
+                                                    ><b>Pohod</b></a
+                                                ><br />VABILO PD Podpeč Preserje
+                                                vabi v nedeljo, 18.01.2026 vse
+                                                člane društva in ostale planince
+                                                na pohod ...
+                                            </div>
+                                            <div style="clear: both"></div>
+                                            <div class="crta"></div>
+
+                                            <div>
+                                                <a href="/prireditve.asp#19624"
+                                                    ><b
+                                                        >Osnovni zimski tečaj
+                                                        (24.-25.01.2026)</b
+                                                    ></a
+                                                ><br />
+                                                Sneg, sonce in dobra družba vse
+                                                to te čaka na osnovnem zimskem
+                                                tečaju na Zelenici! Pridruži se
+                                                nam...
+                                            </div>
+                                            <div style="clear: both"></div>
+                                            <div class="crta"></div>
+
+                                            <div>
+                                                <a href="/prireditve.asp#19635"
+                                                    ><b>Pohod</b></a
+                                                ><br />MALI GOLAK IN ČAVEN PD
+                                                Podpeč Preserje vabi dne 25. 01.
+                                                2026 na Mali Golak in Čaven.
+                                                Mali golak je...
+                                            </div>
+                                            <div style="clear: both"></div>
+                                            <div class="crta"></div>
+
+                                            <div>
+                                                <a href="/prireditve.asp#19648"
+                                                    ><b
+                                                        >PLANIN ZAJAMNIKI ~
+                                                        USKOVNICA</b
+                                                    ></a
+                                                ><br />PD ZZV CELJE VABI V
+                                                NEDELJO, 1.2.2026, ob 7.00 uri -
+                                                na GLAZIJI Poseben avtobus
+                                                odpelje iz Slovenski...
+                                            </div>
+                                            <div style="clear: both"></div>
+                                            <div class="crta"></div>
+                                            <div class="prvarazmere1">
+                                                <img
+                                                    class="prvaarrow"
+                                                    title="Naslednjih 5 prireditev"
+                                                    style="cursor: pointer"
+                                                    src="/slike/arrow.png"
+                                                    onclick="naprej(11,5);"
+                                                />
+                                            </div>
+                                        </div>
+                                        <script>
+                                            if (
+                                                window.performance &&
+                                                window.performance.navigation
+                                                    .type ===
+                                                    window.performance
+                                                        .navigation
+                                                        .TYPE_BACK_FORWARD
+                                            ) {
+                                                if (
+                                                    sessionStorage.getItem(
+                                                        "SSprva11"
+                                                    ) != null
+                                                ) {
+                                                    document.getElementById(
+                                                        "prva11"
+                                                    ).innerHTML =
+                                                        sessionStorage.getItem(
+                                                            "SSprva11"
+                                                        );
+                                                }
+                                            } else {
+                                                sessionStorage.removeItem(
+                                                    "SSprva11"
+                                                );
+                                            }
+                                        </script>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td id="v4s1" class="vs"></td>
+                                <td id="v4s2" class="vs"></td>
+                                <td id="v4s3" class="vs"></td>
+                            </tr>
+
+                            <tr>
+                                <td id="v5s1" class="vs"></td>
+                                <td id="v5s2" class="vs"></td>
+                                <td id="v5s3" class="vs"></td>
+                            </tr>
+
+                            <tr>
+                                <td id="v6s1" class="vs"></td>
+                                <td id="v6s2" class="vs"></td>
+                                <td id="v6s3" class="vs"></td>
+                            </tr>
+
+                            <tr>
+                                <td id="v7s1" class="vs"></td>
+
+                                <td id="v7s2" class="vs"></td>
+                                <td id="v7s3" class="vs"></td>
+                            </tr>
+
+                            <tr>
+                                <td id="v8s1" class="vs"></td>
+
+                                <td id="v8s2" class="vs"></td>
+                                <td id="v8s3" class="vs"></td>
+                            </tr>
+
+                            <tr>
+                                <td id="v9s1" class="vs"></td>
+
+                                <td id="v9s2" class="vs"></td>
+                                <td id="v9s3" class="vs"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <script>
+                    window.addEventListener("resize", function (event) {
+                        prvaSirina();
+                    });
+                    prvaSirina2();
+
+                    var containers = [];
+                    for (let c = 1; c <= 11; c++) {
+                        containers.push("prva" + c);
+                    }
+
+                    for (let c = 0; c < containers.length; c++) {
+                        document
+                            .getElementById(containers[c])
+                            .addEventListener("touchstart", startTouch, false);
+                        document
+                            .getElementById(containers[c])
+                            .addEventListener("touchmove", moveTouch, false);
+                    }
+                    //container.addEventListener("touchstart", startTouch, false);
+                    //container.addEventListener("touchmove", moveTouch, false);
+
+                    // Swipe Up / Down / Left / Right
+                    var initialX = null;
+                    var initialY = null;
+
+                    function startTouch(e) {
+                        initialX = e.touches[0].clientX;
+                        initialY = e.touches[0].clientY;
+                    }
+
+                    function moveTouch(e) {
+                        if (initialX === null) {
+                            return;
+                        }
+
+                        if (initialY === null) {
+                            return;
+                        }
+
+                        var currentX = e.touches[0].clientX;
+                        var currentY = e.touches[0].clientY;
+
+                        var diffX = initialX - currentX;
+                        var diffY = initialY - currentY;
+
+                        if (Math.abs(diffX) > Math.abs(diffY)) {
+                            // sliding horizontally
+                            if (diffX > 0 && diffX > 5) {
+                                // swiped left
+                                let k =
+                                    this.getAttribute("data-value").split("-");
+                                naprej(k[0], parseInt(k[1]) + 5);
+                            } else if (diffX < 0 && diffX < -5) {
+                                // swiped right
+                                let k =
+                                    this.getAttribute("data-value").split("-");
+                                if (
+                                    parseInt(k[1]) >= 5 &&
+                                    parseInt(k[0]) != 9
+                                ) {
+                                    naprej(k[0], parseInt(k[1]) - 5);
+                                }
+                            }
+                        }
+
+                        initialX = null;
+                        initialY = null;
+
+                        if (
+                            Math.abs(diffX) > Math.abs(diffY) &&
+                            Math.abs(diffX) > 5
+                        ) {
+                            e.preventDefault();
+                        }
+                    }
+                </script>
+            </div>
+
+            <div id="noga">
+                <div style="float: right; position: relative">
+                    <a href="http://hr.hribi.net" title="Hrvatski"
+                        ><img src="/slike/hrv2.gif" /></a
+                    >&nbsp;&nbsp;<a href="https://www.hike.uno" title="English"
+                        ><img src="/slike/eng2.gif" /></a
+                    >&nbsp;&nbsp;<a
+                        href="http://www.hiking-trail.net/"
+                        title="English - old website"
+                        ><img src="/slike/eng3.png" /></a
+                    >&nbsp;
+                </div>
+
+                <div>
+                    Copyright © 2006-2026 Hribi.net,
+                    <a class="noga" href="/pogoji.asp">Pogoji uporabe</a>,
+                    <a
+                        class="noga"
+                        style="cursor: pointer"
+                        onclick="javascript:googlefc.callbackQueue.push(googlefc.showRevocationMessage)"
+                        >Zasebnost in piškotki</a
+                    >
+                </div>
+            </div>
+            <div style="clear: both"></div>
+        </div>
+
+        <script></script>
+
+        <div class="right">
+            <div id="oglasD">
+                <style type="text/css">
+                    .adslot_1 {
+                        display: inline-block;
+                        width: 160px;
+                        height: 320px;
+                    }
+                    @media (max-width: 800px) {
+                        .adslot_1 {
+                            display: none;
+                        }
+                    }
+                    @media (min-width: 1024px) {
+                        .adslot_1 {
+                            width: 160px;
+                            height: 600px;
+                        }
+                    }
+                    @media (min-width: 1793px) {
+                        .adslot_1 {
+                            width: 160px;
+                            height: 160px;
+                        }
+                    }
+                </style>
+                <ins
+                    class="adsbygoogle adslot_1"
+                    data-ad-client="ca-pub-0186014428427864"
+                    data-ad-slot="9540509523"
+                    data-adsbygoogle-status="done"
+                    ><iframe
+                        id="aswift_2"
+                        style="
+                            height: 1px !important;
+                            max-height: 1px !important;
+                            max-width: 1px !important;
+                            width: 1px !important;
+                        "
+                        ><iframe id="google_ads_frame2"></iframe></iframe
+                ></ins>
+                <script
+                    async=""
+                    src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+                ></script>
+                <script>
+                    (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        window.addEventListener("resize", function (event) {
+            menu(1);
+            menuUser(1);
+            menuZ();
+        });
+    </script>
+
+    <div id="oglasA">
+        <script
+            src="//cdn.ipromcloud.com/ipromNS.js"
+            async=""
+            defer=""
+        ></script>
+        <div id="iprom_adtag_1532239265273"></div>
+        <img
+            src="data:image/png,iprom"
+            style="display: none"
+            onerror="
+ 	(function(img) {
+ 		window.ipromNS = window.ipromNS || {adTags: []};
+ 		var adTagId = 'iprom_adtag_' + Math.round(Math.random() * (new Date()).getTime());
+ 		var adHolder = document.createElement('div'); adHolder.id = adTagId;
+ 		img.parentNode.insertBefore(adHolder, img);
+ 		ipromNS.adTags.push({
+ 			 sitePath: ['programmatic','obds453j'], 
+ 			 dimension: '468x60',
+ 			 containerId : adTagId,
+ 			 callback : function(err, ad){} 
+ 		});
+ 	})(this);
+ "
+        />
+    </div>
+
+    <div>
+        <script
+            src="//cdn.ipromcloud.com/ipromNS.js"
+            async=""
+            defer=""
+        ></script>
+        <div id="iprom_adtag_655348530229"></div>
+        <img
+            src="data:image/png,iprom"
+            style="display: none"
+            onerror="
+(function(img) {
+window.ipromNS = window.ipromNS || {adTags: []};
+var adTagId = 'iprom_adtag_' + Math.round(Math.random() * (new Date()).getTime());
+var adHolder = document.createElement('div'); adHolder.id = adTagId;
+img.parentNode.insertBefore(adHolder, img);
+ipromNS.adTags.push({
+sitePath: ['programmatic','obds453j'],
+dimension: 'floating',
+containerId : adTagId,
+callback : function(err, ad){}
+});
+})(this);
+"
+        />
+    </div>
+</form>
+
+<script>
+    function ad(id) {
+        var xmlad;
+        try {
+            xmlad = new XMLHttpRequest();
+        } catch (e) {
+            try {
+                xmlad = new ActiveXObject("Msxml2.XMLHTTP");
+            } catch (e) {
+                try {
+                    xmlad = new ActiveXObject("Microsoft.XMLHTTP");
+                } catch (e) {
+                    return false;
+                }
+            }
+        }
+        xmlad.onreadystatechange = function () {
+            if (xmlad.readyState == 4) {
+                if (id == 1) {
+                    document.getElementById("doniraj").style.display = "block";
+                    document.getElementById("oglas1").style.display = "none";
+                }
+                if (id == 2) {
+                    document.getElementById("doniraj").style.display = "none";
+                }
+            }
+        };
+        xmlad.open("GET", "/ajaxad.aspx?id=" + id, false);
+        xmlad.setRequestHeader("Cache-Control", "no-cache");
+        xmlad.setRequestHeader("Pragma", "no-cache");
+        xmlad.setRequestHeader(
+            "If-Modified-Since",
+            "Sat, 1 Jan 2000 00:00:00 GMT"
+        );
+        xmlad.send(null);
+    }
+
+    window.addEventListener("load", () => {
+        fetch(
+            "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js",
+            // "https://www3.doubleclick.net",
+            // "https://static.ads-twitter.com/uwt.js"
+            { method: "HEAD", mode: "no-cors", cache: "no-store" }
+        )
+            .then(ad(0))
+            .catch((err) => ad(1));
+    });
+</script>
